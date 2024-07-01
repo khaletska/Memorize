@@ -13,19 +13,19 @@ struct ContentView: View {
     var body: some View {
         VStack {
             ScrollView {
-                cards
+                self.cards
             }
             Spacer()
-            cardCountAdjusters
+            self.cardCountAdjusters
         }
         .padding()
     }
     
     var cardCountAdjusters: some View {
         HStack {
-            cardRemover
+            self.cardRemover
             Spacer()
-            cardAdder
+            self.cardAdder
         }
         .imageScale(.large)
         .font(.largeTitle)
@@ -33,8 +33,8 @@ struct ContentView: View {
     
     var cards: some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))]) {
-            ForEach(0..<cardCount, id: \.self) { index in
-                CardView(content: emojis[index])
+            ForEach(0..<self.cardCount, id: \.self) { index in
+                CardView(content: self.emojis[index])
                     .aspectRatio(2/3, contentMode: .fit)
             }
         }
@@ -51,11 +51,11 @@ struct ContentView: View {
     
     func makeCardCountAdjuster(by offset: Int, symbol: String) -> some View {
         Button(action: {
-            cardCount += offset
+            self.cardCount += offset
         }, label: {
             Image(systemName: symbol)
         })
-        .disabled(cardCount + offset < 1 || cardCount + offset > emojis.count)
+        .disabled(self.cardCount + offset < 1 || self.cardCount + offset > self.emojis.count)
     }
 }
 
@@ -69,12 +69,12 @@ struct CardView: View {
             Group {
                 base.foregroundColor(.white)
                 base.strokeBorder(lineWidth: 3)
-                Text(content).font(.largeTitle)
+                Text(self.content).font(.largeTitle)
             }
-            .opacity(isFaceUp ? 1 : 0)
-            base.fill().opacity(isFaceUp ? 0 : 1)
+            .opacity(self.isFaceUp ? 1 : 0)
+            base.fill().opacity(self.isFaceUp ? 0 : 1)
         }.onTapGesture {
-            isFaceUp.toggle()
+            self.isFaceUp.toggle()
         }
     }
 }
