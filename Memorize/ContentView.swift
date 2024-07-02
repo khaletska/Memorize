@@ -9,22 +9,20 @@ import SwiftUI
 
 struct ContentView: View {
     let themes: [Theme] = [
-        .init(name: "Pastry", iconName: "birthday.cake.fill", emojis: ["🍞", "🥐", "🥖", "🥨", "🥯", "🥞", "🧇", "🍩", "🍪"]), // pastry
-        .init(name: "Ocean", iconName: "fish.fill", emojis: ["🐳", "🦭", "🐬", "🐟", "🐠", "🐡", "🦈", "🐙", "🪼"]), // ocean
-        .init(name: "Street Food", iconName: "fork.knife", emojis: ["🍔", "🍟", "🍕", "🌭", "🌮", "🌯", "🍿", "🍣", "🍜"]), // street food
-
+        .init(name: "Pastry", iconName: "birthday.cake", emojis: ["🍞", "🥐", "🥖", "🥨", "🥯", "🥞", "🧇", "🍩", "🍪"]), // pastry
+        .init(name: "Ocean", iconName: "fish", emojis: ["🐳", "🦭", "🐬", "🐟", "🐠", "🐡", "🦈", "🐙", "🪼"]), // ocean
+        .init(name: "Food", iconName: "fork.knife", emojis: ["🍔", "🍟", "🍕", "🌭", "🌮", "🌯", "🍿", "🍣", "🍜"]), // street food
     ]
     @State var chosenThemeIndex = 0
-    @State var cardCount: Int = 4
 
     var body: some View {
         VStack {
-            title
+            self.title
             ScrollView {
                 self.cards
             }
             Spacer()
-            themeButtons
+            self.themeButtons
         }
         .padding()
     }
@@ -35,7 +33,7 @@ struct ContentView: View {
     }
 
     var cards: some View {
-        let emojis = (themes[chosenThemeIndex].emojis + themes[chosenThemeIndex].emojis).shuffled()
+        let emojis = (self.themes[chosenThemeIndex].emojis + self.themes[chosenThemeIndex].emojis).shuffled()
 
         return LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
             ForEach(emojis.indices, id: \.self) { index in
@@ -48,9 +46,9 @@ struct ContentView: View {
 
     var themeButtons: some View {
         HStack {
-            ForEach(Array(themes.enumerated()), id: \.0) { (index, theme) in
+            ForEach(Array(self.themes.enumerated()), id: \.0) { (index, theme) in
                 Button(action: {
-                    chosenThemeIndex = index
+                    self.chosenThemeIndex = index
                 }, label: {
                     VStack {
                         Image(systemName: theme.iconName)
