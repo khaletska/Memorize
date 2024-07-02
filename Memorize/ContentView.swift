@@ -8,12 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    let themes: [Theme] = [
-        .init(name: "Pastry", iconName: "birthday.cake", emojis: ["🍞", "🥐", "🥖", "🥨", "🥯", "🥞", "🧇", "🍩", "🍪"]), // pastry
-        .init(name: "Ocean", iconName: "fish", emojis: ["🐳", "🦭", "🐬", "🐟", "🐠", "🐡", "🦈", "🐙", "🪼"]), // ocean
-        .init(name: "Food", iconName: "fork.knife", emojis: ["🍔", "🍟", "🍕", "🌭", "🌮", "🌯", "🍿", "🍣", "🍜"]), // street food
-    ]
-    @State var chosenThemeIndex = 0
+    @State var chosenTheme: Theme = .getRandom()
 
     var body: some View {
         VStack {
@@ -33,11 +28,11 @@ struct ContentView: View {
     }
 
     var cards: some View {
-        let emojis = (self.themes[chosenThemeIndex].emojis + self.themes[chosenThemeIndex].emojis).shuffled()
+        let emojis = (self.chosenTheme.emojis + self.chosenTheme.emojis).shuffled()
 
         return LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
             ForEach(emojis.indices, id: \.self) { index in
-                CardView(content: emojis[index])
+                CardView(content: emojis[index], isFaceUp: false)
                     .aspectRatio(2/3, contentMode: .fit)
             }
         }
@@ -46,9 +41,9 @@ struct ContentView: View {
 
     var themeButtons: some View {
         HStack {
-            ForEach(Array(self.themes.enumerated()), id: \.0) { (index, theme) in
+            ForEach(Theme.all, id: \.self) { theme in
                 Button(action: {
-                    self.chosenThemeIndex = index
+                    self.chosenTheme = theme
                 }, label: {
                     VStack {
                         Image(systemName: theme.iconName)
@@ -81,12 +76,21 @@ struct CardView: View {
     }
 }
 
-struct Theme {
+struct Theme: Hashable {
 
     let name: String
     let iconName: String
     var emojis: Array<String>
 
+    static func getRandom() -> Theme {
+        Self.all.randomElement()!
+    }
+
+    static let all: [Theme] = [
+        .init(name: "Pastry", iconName: "birthday.cake", emojis: ["🍞", "🥐", "🥖", "🥨", "🥯", "🥞", "🧇", "🍩", "🍪"]), // pastry
+        .init(name: "Ocean", iconName: "fish", emojis: ["🐳", "🦭", "🐬", "🐟", "🐠", "🐡", "🦈", "🐙", "🪼"]), // ocean
+        .init(name: "Food", iconName: "fork.knife", emojis: ["🍔", "🍟", "🍕", "🌭", "🌮", "🌯", "🍿", "🍣", "🍜"]), // street food
+    ]
 }
 
 #Preview {
